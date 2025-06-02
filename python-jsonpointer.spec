@@ -2,13 +2,13 @@
 # Conditional build:
 %bcond_without	tests	# do not perform "make test"
 %bcond_without	python2 # CPython 2.x module
-%bcond_without	python3 # CPython 3.x module
+%bcond_with	python3 # CPython 3.x module
 
 Summary:	Identify specific nodes in a JSON document (RFC 6901)
 Summary(pl.UTF-8):	Identyfikowanie określonych węzłów w dokumencie JSON (RFC 6901)
 Name:		python-jsonpointer
 Version:	2.3
-Release:	3
+Release:	4
 License:	BSD
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/jsonpointer/
@@ -88,6 +88,8 @@ rm -rf $RPM_BUILD_ROOT
 # install may not overwrite existing file
 %{__rm} -f $RPM_BUILD_ROOT%{_bindir}/jsonpointer
 %py3_install
+%else
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/jsonpointer{,-2}
 %endif
 
 %clean
@@ -112,4 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n jsonpointer
 %defattr(644,root,root,755)
+%if %{with python3}
 %attr(755,root,root) %{_bindir}/jsonpointer
+%endif
+%attr(755,root,root) %{_bindir}/jsonpointer-2
